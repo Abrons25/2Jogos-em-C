@@ -1,0 +1,126 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <locale.h>
+#include <unistd.h>
+
+int p, j=0;
+char simb='X';
+char cam[10];
+int jog[10];
+
+/* funcao responsavel por dar inicio ao jogo, usa um lanço de repetiçao pra percorrer as posiçoes de 1 a 9
+o cam coloca um espaço vazio nas posiçoes do tabuleiro e o jog = 0 é o registro de numero de jogadas*/
+void inicializar(){
+    for (int i=1;i<10;i++){
+        cam[i]=' ';   
+        jog[i]=0;
+    }
+}
+
+// funçao responsavel por desenhar o tabuleiro do jogo
+void tela(){
+    printf(" %c | %c | %c \n",cam[1],cam[2],cam[3]);
+    printf("-----------\n");
+    printf(" %c | %c | %c \n",cam[4],cam[5],cam[6]);
+    printf("-----------\n");
+    printf(" %c | %c | %c \n\n",cam[7],cam[8],cam[9]);
+}
+
+// funçao que alterna o jogador da rodada entre os simbolos X e O
+char simbolo(char s){
+    if (s=='X'){
+        simb='O';
+    }else{
+        simb='X';
+    }
+    return simb;
+}
+
+// Função que é responsavel por colocar a jogada no tabuleiro.
+void armazenar(int pos){
+    cam[pos] = simb;
+}
+
+// Verifica todas as condições de vitória
+// Possui as condições de vitoria da linhas horizontais, verticais e diagonais
+void triunfo() {
+    
+    if (cam[1] != ' ' && cam[1] == cam[2] && cam[2] == cam[3]) {
+        
+        printf("\nParabéns! O jogador %c venceu!\n", cam[1]);
+        exit(0);
+        
+    }if (cam[4] != ' ' && cam[4] == cam[5] && cam[5] == cam[6]) {
+        
+        printf("\nParabéns! O jogador %c venceu!\n", cam[4]);
+        exit(0);
+        
+    }if (cam[7] != ' ' && cam[7] == cam[8] && cam[8] == cam[9]) {
+        
+        printf("\nParabéns! O jogador %c venceu!\n", cam[7]);
+        exit(0);
+        
+    }if (cam[1] != ' ' && cam[1] == cam[4] && cam[4] == cam[7]) {
+        
+        printf("\nParabéns! O jogador %c venceu!\n", cam[1]);
+        exit(0);
+        
+    }if (cam[2] != ' ' && cam[2] == cam[5] && cam[5] == cam[8]) {
+        
+        printf("\nParabéns! O jogador %c venceu!\n", cam[2]);
+        exit(0);
+        
+    }if (cam[3] != ' ' && cam[3] == cam[6] && cam[6] == cam[9]) {
+        
+        printf("\nParabéns! O jogador %c venceu!\n", cam[3]);
+        exit(0);
+        
+    }if (cam[1] != ' ' && cam[1] == cam[5] && cam[5] == cam[9]) {
+        
+        printf("\nParabéns! O jogador %c venceu!\n", cam[1]);
+        exit(0);
+        
+    }if (cam[3] != ' ' && cam[3] == cam[5] && cam[5] == cam[7]) {
+        printf("\nParabéns! O jogador %c venceu!\n", cam[3]);
+        exit(0);
+    }
+}
+
+/* Função principal
+O inicializar é responsavel por deixar o tabuleiro em branco
+O primeiro laço de repetiçao repete tudo enquanto o numero de jogadas for menor que 9
+O laço sencundario serve para garantir que o jogador digite um numero entre 1 e 9
+O if principal verrifica se a casa escolhida esta vazia.
+O if
+E o while é o fim do laço principal quando o numero de jogadas chegar a 9
+*/
+void main() {
+    setlocale(LC_ALL,"");
+    inicializar();
+    do{
+        do{
+            system("clear");
+            tela();
+            printf("Digite a posição: ");
+            scanf("%d",&p);
+        }while(p<1 || p>9);
+        
+        if (jog[p]==0){
+            j++;
+            simb = simbolo(simb);
+            armazenar(p);
+            jog[p]=p;
+            if (j >= 5) {
+                system("clear"); 
+                tela();          
+                triunfo();       
+            }
+        }else{
+            printf("Jogada já realizada\n");
+            sleep(3);
+        }
+    
+        system("clear");
+        tela();
+    }while(j<9);
+}
